@@ -1,4 +1,4 @@
-import { Button } from 'semantic-ui-react';
+import EventDashboard from '../../features/events/dashboard/EventDashboard';
 
 function App() {
     return (
@@ -6,8 +6,7 @@ function App() {
             <h1>
                 Welcome to Revents
             </h1>
-            <button className='ui icon red button'><i className='user icon'></i> CSS Button</button>
-            <Button icon='smile' content='React Button' color='green' label='Label' />
+            <EventDashboard />
         </div>
     );
 }
