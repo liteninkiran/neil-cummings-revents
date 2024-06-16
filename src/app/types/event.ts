@@ -15,3 +15,12 @@ export type Attendee = {
     name: string;
     photoURL: string;
 }
+
+export type EventFormInputs = {
+    title: string;
+    category: string;
+    description: string;
+    city: string;
+    venue: string;
+    date: string;
+}
