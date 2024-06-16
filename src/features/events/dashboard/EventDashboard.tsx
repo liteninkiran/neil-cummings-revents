@@ -12,17 +12,30 @@ type Props = {
 
 export default function EventDashboard({ formOpen, setFormOpen }: Props) {
     const [events, setEvents] = useState<AppEvent[]>([]);
+    const [selectedEvent, setSelectedEvent] = useState<AppEvent | null>(null);
     const initialiseEvents = () => setEvents(sampleData);
     const addEvent = (event: AppEvent) => setEvents(prev => [...prev, event]);
+    const handleSelectedEvent = (event: AppEvent) => {
+        setSelectedEvent(event);
+        setFormOpen(true);
+    }
     useEffect(initialiseEvents, []);
     return (
         <Grid>
             <Grid.Column width={10}>
-                <EventList events={events} />
+                <EventList events={events} selectEvent={handleSelectedEvent} />
             </Grid.Column>
             <Grid.Column width={6}>
                 {
-                    formOpen ? (<EventForm setFormOpen={setFormOpen} addEvent={appEvent => addEvent(appEvent)} />) : (null)
+                    formOpen ? (
+                        <EventForm
+                            setFormOpen={setFormOpen}
+                            addEvent={appEvent => addEvent(appEvent)}
+                            selectedEvent={selectedEvent}
+                        />
+                    ) : (
+                        null
+                    )
                 }
             </Grid.Column>
         </Grid>

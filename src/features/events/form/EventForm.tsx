@@ -6,10 +6,12 @@ import { createId } from '@paralleldrive/cuid2';
 type Props = {
     setFormOpen: (value: boolean) => void;
     addEvent: (event: AppEvent) => void;
+    selectedEvent: AppEvent | null;
 }
 
-export default function EventForm({ setFormOpen, addEvent }: Props) {
-    const [formValues, setFormValues] = useState(intialValues);
+export default function EventForm({ setFormOpen, addEvent, selectedEvent }: Props) {
+    const initialValues = selectedEvent ?? emptyObject;
+    const [formValues, setFormValues] = useState(initialValues);
     const onSubmit = () => {
         const extraProps = {
             id: createId(),
@@ -90,7 +92,7 @@ export default function EventForm({ setFormOpen, addEvent }: Props) {
     );
 }
 
-const intialValues: EventFormInputs = {
+const emptyObject: EventFormInputs = {
     title: '',
     category: '',
     description: '',
