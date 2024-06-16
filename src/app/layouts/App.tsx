@@ -7,16 +7,18 @@ function App() {
     const location = useLocation();
     return (
         <>
-            <NavBar />
-            <Container className='main'>
-                {
-                    location.pathname === '/' ? (
-                        <HomePage />
-                    ) : (
-                        <Outlet />
-                    )
-                }
-            </Container>
+            {
+                location.pathname === '/' ? (
+                    <HomePage />
+                ) : (
+                    <>
+                        <NavBar />
+                        <Container className='main'>
+                            <Outlet />
+                        </Container>
+                    </>
+                )
+            }
         </>
     );
 }
