@@ -26,11 +26,16 @@ export default function EventDashboard({
         selectEvent(null);
         setFormOpen(false);
     }
+    const deleteEvent = (id: string) => setEvents(events.filter(evt => evt.id !== id));
     useEffect(initialiseEvents, []);
     return (
         <Grid>
             <Grid.Column width={10}>
-                <EventList events={events} selectEvent={selectEvent} />
+                <EventList
+                    events={events}
+                    selectEvent={selectEvent}
+                    deleteEvent={deleteEvent}
+                />
             </Grid.Column>
             <Grid.Column width={6}>
                 {
