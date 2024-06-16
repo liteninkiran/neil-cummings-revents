@@ -1,19 +1,29 @@
 import { ChangeEvent, useState } from 'react';
 import { Button, Form, Header, Segment } from 'semantic-ui-react';
-import { EventFormInputs } from '../../../app/types/event';
+import { AppEvent, EventFormInputs } from '../../../app/types/event';
+import { createId } from '@paralleldrive/cuid2';
 
 type Props = {
     setFormOpen: (value: boolean) => void;
+    addEvent: (event: AppEvent) => void;
 }
 
-export default function EventForm({ setFormOpen }: Props) {
-    const [values, setValues] = useState(intialValues);
+export default function EventForm({ setFormOpen, addEvent }: Props) {
+    const [formValues, setFormValues] = useState(intialValues);
     const onSubmit = () => {
-        console.log(values);
+        const extraProps = {
+            id: createId(),
+            hostedBy: 'Bob',
+            attendees: [],
+            hostPhotoURL: '',
+        }
+        const event: AppEvent = { ...formValues, ...extraProps }
+        addEvent(event);
+        setFormOpen(false);
     }
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setValues({ ...values, [name]: value });
+        setFormValues({ ...formValues, [name]: value });
     }
     return (
         <Segment clearing>
@@ -24,7 +34,7 @@ export default function EventForm({ setFormOpen }: Props) {
                         type='text'
                         placeholder='Event Title'
                         name='title'
-                        value={values.title}
+                        value={formValues.title}
                         onChange={e => handleInputChange(e)}
                     />
                 </Form.Field>
@@ -33,7 +43,7 @@ export default function EventForm({ setFormOpen }: Props) {
                         type='text'
                         placeholder='Category'
                         name='category'
-                        value={values.category}
+                        value={formValues.category}
                         onChange={e => handleInputChange(e)}
                     />
                 </Form.Field>
@@ -42,7 +52,7 @@ export default function EventForm({ setFormOpen }: Props) {
                         type='text'
                         placeholder='Description'
                         name='description'
-                        value={values.description}
+                        value={formValues.description}
                         onChange={e => handleInputChange(e)}
                     />
                 </Form.Field>
@@ -51,7 +61,7 @@ export default function EventForm({ setFormOpen }: Props) {
                         type='text'
                         placeholder='City'
                         name='city'
-                        value={values.city}
+                        value={formValues.city}
                         onChange={e => handleInputChange(e)}
                     />
                 </Form.Field>
@@ -59,17 +69,17 @@ export default function EventForm({ setFormOpen }: Props) {
                     <input
                         type='text'
                         placeholder='Venue'
-                        name='vnue'
-                        value={values.venue}
+                        name='venue'
+                        value={formValues.venue}
                         onChange={e => handleInputChange(e)}
                     />
                 </Form.Field>
                 <Form.Field>
                     <input
-                        type='text'
+                        type='date'
                         placeholder='Date'
                         name='date'
-                        value={values.date}
+                        value={formValues.date}
                         onChange={e => handleInputChange(e)}
                     />
                 </Form.Field>
