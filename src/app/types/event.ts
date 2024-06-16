@@ -24,4 +24,5 @@ export type EventFormInputs = {
     city: string;
     venue: string;
     date: string;
+    attendees: Attendee[];
 }

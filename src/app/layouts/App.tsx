@@ -7,7 +7,7 @@ import { AppEvent } from '../types/event';
 function App() {
     const [formOpen, setFormOpen] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState<AppEvent | null>(null);
-    const handleSelectedEvent = (event: AppEvent) => {
+    const handleSelectedEvent = (event: AppEvent | null) => {
         setSelectedEvent(event);
         setFormOpen(true);
     }
@@ -23,7 +23,7 @@ function App() {
                     formOpen={formOpen}
                     setFormOpen={setFormOpen}
                     selectedEvent={selectedEvent}
-                    handleSelectedEvent={handleSelectedEvent}
+                    selectEvent={handleSelectedEvent}
                 />
             </Container>
         </>

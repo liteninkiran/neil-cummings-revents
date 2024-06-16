@@ -9,30 +9,35 @@ type Props = {
     formOpen: boolean;
     selectedEvent: AppEvent | null;
     setFormOpen: (value: boolean) => void;
-    handleSelectedEvent: (event: AppEvent) => void;
+    selectEvent: (event: AppEvent | null) => void;
 }
 
 export default function EventDashboard({
     formOpen,
     selectedEvent,
     setFormOpen,
-    handleSelectedEvent,
+    selectEvent,
 }: Props) {
     const [events, setEvents] = useState<AppEvent[]>([]);
     const initialiseEvents = () => setEvents(sampleData);
     const addEvent = (event: AppEvent) => setEvents(prev => [...prev, event]);
-
+    const updateEvent = (updateEvent: AppEvent) => {
+        setEvents(events.map(evt => evt.id === updateEvent.id ? updateEvent : evt));
+        selectEvent(null);
+        setFormOpen(false);
+    }
     useEffect(initialiseEvents, []);
     return (
         <Grid>
             <Grid.Column width={10}>
-                <EventList events={events} selectEvent={handleSelectedEvent} />
+                <EventList events={events} selectEvent={selectEvent} />
             </Grid.Column>
             <Grid.Column width={6}>
                 {
                     formOpen ? (
                         <EventForm
                             setFormOpen={setFormOpen}
+                            updateEvent={updateEvent}
                             addEvent={appEvent => addEvent(appEvent)}
                             selectedEvent={selectedEvent}
                             key={selectedEvent ? selectedEvent.id : 'create' }

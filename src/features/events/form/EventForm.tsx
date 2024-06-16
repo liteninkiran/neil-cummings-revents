@@ -4,12 +4,13 @@ import { AppEvent, EventFormInputs } from '../../../app/types/event';
 import { createId } from '@paralleldrive/cuid2';
 
 type Props = {
+    selectedEvent: AppEvent | null;
     setFormOpen: (value: boolean) => void;
     addEvent: (event: AppEvent) => void;
-    selectedEvent: AppEvent | null;
+    updateEvent: (updateEvent: AppEvent) => void;
 }
 
-export default function EventForm({ setFormOpen, addEvent, selectedEvent }: Props) {
+export default function EventForm({ selectedEvent, setFormOpen, addEvent, updateEvent }: Props) {
     const initialValues = selectedEvent ?? emptyObject;
     const [formValues, setFormValues] = useState(initialValues);
     const onSubmit = () => {
@@ -19,8 +20,9 @@ export default function EventForm({ setFormOpen, addEvent, selectedEvent }: Prop
             attendees: [],
             hostPhotoURL: '',
         }
-        const event: AppEvent = { ...formValues, ...extraProps }
-        addEvent(event);
+        const newEvent: AppEvent = { ...formValues, ...extraProps }
+        const updatedEvent: AppEvent = { ...selectedEvent, ...formValues }
+        selectedEvent ? updateEvent(updatedEvent) : addEvent(newEvent);
         setFormOpen(false);
     }
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -29,7 +31,7 @@ export default function EventForm({ setFormOpen, addEvent, selectedEvent }: Prop
     }
     return (
         <Segment clearing>
-            <Header content='Create Event' />
+            <Header content={selectedEvent ? 'Update Event' : 'Create Event'} />
             <Form onSubmit={onSubmit}>
                 <Form.Field>
                     <input
@@ -99,4 +101,5 @@ const emptyObject: EventFormInputs = {
     city: '',
     venue: '',
     date: '',
+    attendees: [],
 }
