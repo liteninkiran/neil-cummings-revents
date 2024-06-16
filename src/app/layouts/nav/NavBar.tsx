@@ -1,10 +1,6 @@
 import { Button, Container, Menu, MenuItem } from "semantic-ui-react";
 
-type Props = {
-    setFormOpen: (value: boolean) => void;
-}
-
-export default function NavBar({ setFormOpen }: Props) {
+export default function NavBar() {
     return (
         <Menu inverted={true} fixed='top'>
             <Container>
@@ -21,7 +17,6 @@ export default function NavBar({ setFormOpen }: Props) {
                         positive={true}
                         inverted={true}
                         content='Create Event'
-                        onClick={() => setFormOpen(true)}
                     />
                 </MenuItem>
 
