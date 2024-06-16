@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Outlet } from 'react-router-dom';
 import { Container } from 'semantic-ui-react';
 import EventDashboard from '../../features/events/dashboard/EventDashboard';
 import NavBar from './nav/NavBar';
@@ -19,6 +20,7 @@ function App() {
         <>
             <NavBar setFormOpen={handleCreateFormOpen} />
             <Container className='main'>
+                <Outlet />
                 <EventDashboard
                     formOpen={formOpen}
                     setFormOpen={setFormOpen}
