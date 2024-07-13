@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux'
-
+import { testSlice } from '../scratch/testSlice';
 
 export const store = configureStore({
-    reducer: {},
+    reducer: {
+        test: testSlice.reducer,
+    },
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
