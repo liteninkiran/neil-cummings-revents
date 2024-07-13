@@ -6,6 +6,8 @@ import { useAppSelector } from '../../../app/store/store';
 import { createId } from '@paralleldrive/cuid2';
 import { Controller, FieldValues, useForm } from 'react-hook-form';
 import { categoryOptions } from './categoryOptions';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 export default function EventForm() {
     const { register, handleSubmit, control, setValue, formState: { errors, isValid, isSubmitting } } = useForm({
@@ -76,13 +78,24 @@ export default function EventForm() {
                     {...register('venue', { required: 'Venue is required' })}
                     error={errors.venue && errors.venue.message}
                 />
-                <Form.Input
-                    type='date'
-                    placeholder='Date'
-                    defaultValue={event?.date || ''}
-                    {...register('date', { required: 'Date is required' })}
-                    error={errors.date && errors.date.message}
-                />
+                <Form.Field>
+                    <Controller
+                        name='date'
+                        control={control}
+                        rules={{ required: 'Date is required' }}
+                        defaultValue={event && new Date(event.date) || null}
+                        render={({ field }) => (
+                            <DatePicker
+                                selected={field.value}
+                                onChange={value => setValue('date', value, { shouldValidate: true })}
+                                showTimeSelect
+                                timeCaption='time'
+                                dateFormat='dd/MM/yyyy HH:mm'
+                                placeholderText='Event Date/Time'
+                            />
+                        )}
+                    />
+                </Form.Field>
 
                 <Button type='submit' floated='right' positive content='Submit' disabled={!isValid} loading={isSubmitting} />
                 <Button type='submit' floated='right' content='Cancel' disabled={isSubmitting} />
