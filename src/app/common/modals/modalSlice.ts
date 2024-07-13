@@ -1,10 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice } from '@reduxjs/toolkit'
-import { ReactNode } from 'react';
 
 type State = {
     open: boolean;
     type: string | null;
-    data: ReactNode;
+    data: any;
 }
 
 const initialState: State = {
