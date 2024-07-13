@@ -2,13 +2,13 @@ import { createSlice } from '@reduxjs/toolkit';
 import { User } from '../../app/types/user';
 
 type State = {
-    authenticated: boolean
-    currentUser: User | null
+    authenticated: boolean;
+    currentUser: User | null;
 }
 
 const initialState: State = {
     authenticated: false,
-    currentUser: null
+    currentUser: null,
 }
 
 export const authSlice = createSlice({
@@ -19,7 +19,7 @@ export const authSlice = createSlice({
             state.authenticated = true;
             state.currentUser = {
                 email: action.payload.email,
-                photoURL: '/user.png'
+                photoURL: '/user.png',
             }
         },
         signOut: (state) => {
