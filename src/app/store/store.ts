@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux'
 import { testSlice } from '../scratch/testSlice';
+import { eventSlice } from '../../features/events/eventSlice';
 
 export const store = configureStore({
     reducer: {
         test: testSlice.reducer,
+        events: eventSlice.reducer,
     },
 });
 
