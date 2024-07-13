@@ -1,9 +1,14 @@
 import { ChangeEvent, useState } from 'react';
 import { Button, Form, Header, Segment } from 'semantic-ui-react';
 import { EventFormInputs } from '../../../app/types/event';
+import { useParams } from 'react-router-dom';
+import { useAppSelector } from '../../../app/store/store';
 
 export default function EventForm() {
-    const initialValues = emptyObject;
+    const { id } = useParams();
+    const event = useAppSelector(state => state.events.events.find(e => e.id === id));
+
+    const initialValues = event ?? emptyObject;
     const [formValues, setFormValues] = useState(initialValues);
     const onSubmit = () => {
         console.log(formValues);
@@ -24,7 +29,7 @@ export default function EventForm() {
     }
     return (
         <Segment clearing>
-            <Header content={'Create Event'} />
+            <Header content={event ? 'Update Event' : 'Create Event'} />
             <Form onSubmit={onSubmit}>
                 <Form.Field>
                     <input
