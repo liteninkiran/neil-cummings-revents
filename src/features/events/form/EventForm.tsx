@@ -1,27 +1,30 @@
 import { ChangeEvent, useState } from 'react';
 import { Button, Form, Header, Segment } from 'semantic-ui-react';
-import { EventFormInputs } from '../../../app/types/event';
-import { useParams } from 'react-router-dom';
-import { useAppSelector } from '../../../app/store/store';
+import { AppEvent, EventFormInputs } from '../../../app/types/event';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../../app/store/store';
+import { createEvent, updateEvent } from '../eventSlice';
+import { createId } from '@paralleldrive/cuid2';
 
 export default function EventForm() {
-    const { id } = useParams();
+    const params = useParams();
+    const id = params.id ?? createId();
     const event = useAppSelector(state => state.events.events.find(e => e.id === id));
-
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const initialValues = event ?? emptyObject;
     const [formValues, setFormValues] = useState(initialValues);
     const onSubmit = () => {
-        console.log(formValues);
-        // const extraProps = {
-        //     id: createId(),
-        //     hostedBy: 'Bob',
-        //     attendees: [],
-        //     hostPhotoURL: '',
-        // }
-        // const newEvent: AppEvent = { ...formValues, ...extraProps }
-        // const updatedEvent: AppEvent = { ...selectedEvent, ...formValues }
-        // selectedEvent ? updateEvent(updatedEvent) : addEvent(newEvent);
-        // setFormOpen(false);
+        const extraProps = {
+            id,
+            hostedBy: 'Bob',
+            attendees: [],
+            hostPhotoURL: '',
+        }
+        const newEvent: AppEvent = { ...formValues, ...extraProps }
+        const updatedEvent: AppEvent = { ...event, ...formValues }
+        event ? dispatch(updateEvent(updatedEvent)) : dispatch(createEvent(newEvent));
+        navigate(`/events/${id}`);
     }
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
