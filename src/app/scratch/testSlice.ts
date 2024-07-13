@@ -11,5 +11,11 @@ const initialState: State = {
 export const testSlice = createSlice({
     name: 'test',
     initialState,
-    reducers: {},
+    reducers: {
+        increment: (state) => { state.data++ },
+        decrement: (state) => { state.data-- },
+        incrementBy: (state, action) => { state.data += action.payload },
+    },
 });
+
+export const { increment, decrement, incrementBy } = testSlice.actions;
