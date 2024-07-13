@@ -7,7 +7,7 @@ import { createId } from '@paralleldrive/cuid2';
 import { FieldValues, useForm } from 'react-hook-form';
 
 export default function EventForm() {
-    const { register, handleSubmit, formState: { errors, isValid } } = useForm({
+    const { register, handleSubmit, formState: { errors, isValid, isSubmitting } } = useForm({
         mode: 'onTouched',
     });
     const params = useParams();
@@ -30,7 +30,7 @@ export default function EventForm() {
     }
     return (
         <Segment clearing>
-            <Header content={event ? 'Update Event' : 'Create Event'} />
+            <Header content={'Event Details'} sub color='teal' />
             <Form onSubmit={handleSubmit(onSubmit)}>
                 <Form.Input
                     placeholder='Event Title'
@@ -44,12 +44,13 @@ export default function EventForm() {
                     {...register('category', { required: 'Category is required' })}
                     error={errors.category && errors.category.message}
                 />
-                <Form.Input
+                <Form.TextArea
                     placeholder='Description'
                     defaultValue={event?.description || ''}
                     {...register('description', { required: 'Description is required' })}
                     error={errors.description && errors.description.message}
                 />
+                <Header sub content='Location Details' color='teal' />
                 <Form.Input
                     placeholder='City'
                     defaultValue={event?.city || ''}
@@ -70,8 +71,8 @@ export default function EventForm() {
                     error={errors.date && errors.date.message}
                 />
 
-                <Button type='submit' floated='right' positive content='Submit' disabled={!isValid} />
-                <Button type='submit' floated='right' content='Cancel' />
+                <Button type='submit' floated='right' positive content='Submit' disabled={!isValid} loading={isSubmitting} />
+                <Button type='submit' floated='right' content='Cancel' disabled={isSubmitting} />
             </Form>
         </Segment>
     );
