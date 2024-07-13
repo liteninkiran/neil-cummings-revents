@@ -5,7 +5,7 @@ import SignedInMenu from './SignedInMenu';
 import { useState } from 'react';
 
 export default function NavBar() {
-    const [auth, setAuth] = useState(true);
+    const [auth, setAuth] = useState(false);
     return (
         <Menu inverted={true} fixed='top'>
             <Container>
@@ -33,7 +33,7 @@ export default function NavBar() {
                     auth ? (
                         <SignedInMenu setAuth={value => setAuth(value)} />
                     ) : (
-                        <SignedOutButtons setAuth={value => setAuth(value)} />
+                        <SignedOutButtons />
                     )
                 }
 
