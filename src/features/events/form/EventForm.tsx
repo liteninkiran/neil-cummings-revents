@@ -1,35 +1,47 @@
 import { Button, Form, Header, Segment } from 'semantic-ui-react';
-// import { useNavigate, useParams } from 'react-router-dom';
-// import { useAppDispatch, useAppSelector } from '../../../app/store/store';
-import { useParams } from 'react-router-dom';
-import { useAppSelector } from '../../../app/store/store';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../../app/store/store';
 import { createId } from '@paralleldrive/cuid2';
-import { Controller, FieldValues, useForm } from 'react-hook-form';
+import { Controller, FieldValues, useForm, UseFormProps } from 'react-hook-form';
 import { categoryOptions } from './categoryOptions';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { AppEvent } from '../../../app/types/event';
+import { createEvent, updateEvent } from '../eventSlice';
 
 export default function EventForm() {
-    const { register, handleSubmit, control, setValue, formState: { errors, isValid, isSubmitting } } = useForm({
+    const formOptions: UseFormProps = {
         mode: 'onTouched',
-    });
+    }
+    const {
+        register,
+        handleSubmit,
+        control,
+        setValue,
+        formState: {
+            errors,
+            isValid,
+            isSubmitting
+        }
+    } = useForm(formOptions);
     const params = useParams();
     const id = params.id ?? createId();
     const event = useAppSelector(state => state.events.events.find(e => e.id === id));
-    // const dispatch = useAppDispatch();
-    // const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const onSubmit = (data: FieldValues) => {
-        console.log(data);
-        // const extraProps = {
-        //     id,
-        //     hostedBy: 'Bob',
-        //     attendees: [],
-        //     hostPhotoURL: '',
-        // }
-        // const newEvent: AppEvent = { ...formValues, ...extraProps }
-        // const updatedEvent: AppEvent = { ...event, ...formValues }
-        // event ? dispatch(updateEvent(updatedEvent)) : dispatch(createEvent(newEvent));
-        // navigate(`/events/${id}`);
+        const date = data.date.toString();
+        const extraProps = {
+            id,
+            hostedBy: 'Bob',
+            attendees: [],
+            hostPhotoURL: '',
+            date,
+        }
+        const newEvent: Partial<AppEvent> = { ...data, ...extraProps }
+        const updatedEvent: Partial<AppEvent> = { ...event, ...data, date }
+        event ? dispatch(updateEvent(updatedEvent)) : dispatch(createEvent(newEvent));
+        navigate(`/events/${id}`);
     }
     return (
         <Segment clearing>
