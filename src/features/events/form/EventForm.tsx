@@ -1,13 +1,13 @@
 import { Button, Form, Header, Segment } from 'semantic-ui-react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../../app/store/store';
-import { createId } from '@paralleldrive/cuid2';
+import { useAppSelector } from '../../../app/store/store';
 import { Controller, FieldValues, useForm, UseFormProps } from 'react-hook-form';
 import { categoryOptions } from './categoryOptions';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { AppEvent } from '../../../app/types/event';
-import { createEvent, updateEvent } from '../eventSlice';
+import { collection, doc, setDoc, Timestamp, updateDoc } from 'firebase/firestore';
+import { db } from '../../../app/config/firebase';
 
 export default function EventForm() {
     const formOptions: UseFormProps = {
@@ -24,13 +24,19 @@ export default function EventForm() {
             isSubmitting
         }
     } = useForm(formOptions);
-    const params = useParams();
-    const id = params.id ?? createId();
+    const { id } = useParams();
     const event = useAppSelector(state => state.events.events.find(e => e.id === id));
-    const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const onSubmit = (data: FieldValues) => {
-        const date = data.date.toString();
+    const getDate = (dt: string) => Timestamp.fromDate(dt as unknown as Date);
+    const updateEvent = async (data: AppEvent) => {
+        if (!event) return;
+        const docRef = doc(db, 'events', event.id);
+        const uData = { ...data, date: getDate(data.date) }
+        await updateDoc(docRef, uData);
+    }
+    const createEvent = async (data: FieldValues) => {
+        const newEventRef = doc(collection(db, 'events'));
+        const date = getDate(data.date.toString());
         const extraProps = {
             id,
             hostedBy: 'Bob',
@@ -38,10 +44,22 @@ export default function EventForm() {
             hostPhotoURL: '',
             date,
         }
-        const newEvent: Partial<AppEvent> = { ...data, ...extraProps }
-        const updatedEvent: Partial<AppEvent> = { ...event, ...data, date }
-        event ? dispatch(updateEvent(updatedEvent)) : dispatch(createEvent(newEvent));
-        navigate(`/events/${id}`);
+        const nData = { ...data, extraProps }
+        await setDoc(newEventRef, nData);
+        return newEventRef;
+    }
+    const onSubmit = async (data: FieldValues) => {
+        try {
+            if (event) {
+                await updateEvent({ ...event, ...data });
+                navigate(`/events/${event.id}`);
+            } else {
+                const ref = await createEvent(data);
+                navigate(`/events/${ref.id}`);
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
     return (
         <Segment clearing>

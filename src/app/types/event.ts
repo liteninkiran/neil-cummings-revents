@@ -1,5 +1,5 @@
 export type AppEvent = {
-    id?: string;
+    id: string;
     title: string;
     date: string;
     category: string;
