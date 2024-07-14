@@ -28,7 +28,7 @@ export default function EventForm() {
     const { id } = useParams();
     const event = useAppSelector(state => state.events.events.find(e => e.id === id));
     const navigate = useNavigate();
-    const getDate = (dt: string) => Timestamp.fromDate(dt as unknown as Date);
+    const getDate = (dt: string) => Timestamp.fromDate(new Date(dt));
     const updateEvent = async (data: AppEvent) => {
         if (!event) return;
         const docRef = doc(db, 'events', event.id);
@@ -37,15 +37,15 @@ export default function EventForm() {
     }
     const createEvent = async (data: FieldValues) => {
         const newEventRef = doc(collection(db, 'events'));
-        const date = getDate(data.date.toString());
+        const date = getDate(data.date.toISOString());
         const extraProps = {
-            id,
             hostedBy: 'Bob',
             attendees: [],
             hostPhotoURL: '',
             date,
         }
-        const nData = { ...data, extraProps }
+        const nData = { ...data, ...extraProps }
+        console.log(nData);
         await setDoc(newEventRef, nData);
         return newEventRef;
     }
@@ -60,7 +60,7 @@ export default function EventForm() {
             }
         } catch (error: any) {
             toast.error(error.message);
-            console.log(error.message);
+            console.log('EventForm', error.message);
         }
     }
     return (

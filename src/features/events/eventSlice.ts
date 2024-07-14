@@ -19,9 +19,11 @@ export const eventSlice = createSlice({
         deleteEvent: (state, action) => { state.events.splice(state.events.findIndex(evt => evt.id === action.payload), 1) },
         setMyEvents: {
             reducer: (state, action: PayloadAction<AppEvent[]>) => { state.events = action.payload; },
-            prepare: (events) =>
-                ({ payload: events.map((e: any) =>
-                    ({ ...e, date: (e.date as Timestamp).toDate().toISOString() })) }),
+            prepare: (events: AppEvent[]) => {
+
+                return ({ payload: events.map((e: any) =>
+                    ({ ...e, date: (e.date as Timestamp).toDate().toISOString() })) })
+            },
         },
     },
 });

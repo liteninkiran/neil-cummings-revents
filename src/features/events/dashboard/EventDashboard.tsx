@@ -23,7 +23,7 @@ export default function EventDashboard() {
             setLoading(false);
         }
         const obsError = (err: FirestoreError) => {
-            console.log(err);
+            console.log('EventDashboard', err);
             setLoading(false);
         }
         const obs = { next: obsNext, error: obsError }
