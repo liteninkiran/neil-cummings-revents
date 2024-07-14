@@ -1,9 +1,31 @@
+import { useEffect } from 'react';
 import { Grid } from 'semantic-ui-react';
+import { collection, FirestoreError, onSnapshot, query, QuerySnapshot } from 'firebase/firestore';
+import { db } from '../../../app/config/firebase';
+import { useAppDispatch, useAppSelector } from '../../../app/store/store';
+import { AppEvent } from '../../../app/types/event';
 import EventList from './EventList';
-import { useAppSelector } from '../../../app/store/store';
+import { setMyEvents } from '../eventSlice';
 
 export default function EventDashboard() {
     const { events } = useAppSelector(state => state.events);
+    const dispatch = useAppDispatch();
+    const getData = () => {
+        const obsNext = (querySnapshot: QuerySnapshot) => {
+            const evts: AppEvent[] = [];
+            querySnapshot.forEach(doc => {
+                const data = doc.data() as AppEvent;
+                evts.push({ id: doc.id, ...data });
+            });
+            dispatch(setMyEvents(evts));
+        }
+        const obsError = (err: FirestoreError) => console.log(err);
+        const obs = { next: obsNext, error: obsError }
+        const qry = query(collection(db, 'events'));
+        const unsubscribe = onSnapshot(qry, obs);
+        return () => unsubscribe();
+    }
+    useEffect(getData, [dispatch]);
     return (
         <Grid>
             <Grid.Column width={10}>

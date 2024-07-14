@@ -15,8 +15,9 @@ export const eventSlice = createSlice({
     reducers: {
         createEvent: (state, action) => { state.events.push(action.payload); },
         updateEvent: (state, action) => { state.events[state.events.findIndex(evt => evt.id === action.payload.id)] = action.payload; },
-        deleteEvent: (state, action) => { state.events.splice(state.events.findIndex(evt => evt.id === action.payload), 1) }
+        deleteEvent: (state, action) => { state.events.splice(state.events.findIndex(evt => evt.id === action.payload), 1) },
+        setMyEvents: (state, action) => { state.events = action.payload; },
     },
 });
 
-export const {createEvent, updateEvent, deleteEvent} = eventSlice.actions;
+export const {createEvent, updateEvent, deleteEvent, setMyEvents} = eventSlice.actions;
