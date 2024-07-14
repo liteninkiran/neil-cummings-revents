@@ -7,7 +7,7 @@ type State = {
 }
 
 const initialState: State = {
-    events: []
+    events: [],
 }
 
 export const eventSlice = createSlice({
