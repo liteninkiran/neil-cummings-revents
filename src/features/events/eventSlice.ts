@@ -10,7 +10,7 @@ const initialState: State = { data: [] }
 const getDate = (date: Timestamp) => date.toDate().toISOString();
 const mapDate = (event: any): AppEvent => ({ ...event, date: getDate(event.date) });
 const reducer = (state: any, action: PayloadAction<AppEvent[]>) => { state.data = action.payload; state.status = 'finished'; }
-const prepare = (events: any[]) => ({ payload: events.map<AppEvent>(mapDate) })
+const prepare = (events: any[]) => ({ payload: events.map<AppEvent>(mapDate) });
 const setEvts = { reducer, prepare }
 const reducers = { success: setEvts }
 const slice = { name, initialState: initialState as GenericState<AppEvent[]>, reducers }

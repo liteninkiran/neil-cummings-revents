@@ -2,16 +2,16 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../app/store/store';
 import { Grid } from 'semantic-ui-react';
-import EventDetailedHeader from './EventDetailedHeader';
-import EventDetailedInfo from './EventDetailedInfo';
-import EventDetailedChat from './EventDetailedChat';
-import EventDetailedSidebar from './EventDetailedSidebar';
 import { doc, DocumentSnapshot, FirestoreError, onSnapshot } from 'firebase/firestore';
 import { db } from '../../../app/config/firebase';
 import { actions } from '../eventSlice';
 import { toast } from 'react-toastify';
-import LoadingComponent from '../../../app/layouts/LoadingComponent';
 import { AppEvent } from '../../../app/types/event';
+import EventDetailedHeader from './EventDetailedHeader';
+import EventDetailedInfo from './EventDetailedInfo';
+import EventDetailedChat from './EventDetailedChat';
+import EventDetailedSidebar from './EventDetailedSidebar';
+import LoadingComponent from '../../../app/layouts/LoadingComponent';
 
 export default function EventDetailedPage() {
     const { id } = useParams();
