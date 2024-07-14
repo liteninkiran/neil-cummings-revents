@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import TestModal from '../../scratch/TestModal';
 import LoginForm from '../../../features/auth/LoginForm';
 import { useAppSelector } from '../../store/store'

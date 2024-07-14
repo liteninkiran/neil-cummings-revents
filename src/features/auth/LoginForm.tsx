@@ -22,8 +22,7 @@ export default function LoginForm() {
     const email = {
         options: {
             required: true,
-            // eslint-disable-next-line no-useless-escape
-            pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+            pattern: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
         },
         errors: {
             required: (errors.email?.type === 'required' && 'Email is required'),
