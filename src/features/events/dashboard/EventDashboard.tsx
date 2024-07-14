@@ -4,12 +4,12 @@ import { collection, FirestoreError, onSnapshot, query, QuerySnapshot } from 'fi
 import { db } from '../../../app/config/firebase';
 import { useAppDispatch, useAppSelector } from '../../../app/store/store';
 import { AppEvent } from '../../../app/types/event';
+import { actions } from '../eventSlice';
 import EventList from './EventList';
-import { setMyEvents } from '../eventSlice';
 import LoadingComponent from '../../../app/layouts/LoadingComponent';
 
 export default function EventDashboard() {
-    const { events } = useAppSelector(state => state.events);
+    const { data: events } = useAppSelector(state => state.events);
     const dispatch = useAppDispatch();
     const [loading, setLoading] = useState(true);
     const getData = () => {
@@ -19,7 +19,7 @@ export default function EventDashboard() {
                 const data = doc.data() as AppEvent;
                 evts.push({ ...data, id: doc.id });
             });
-            dispatch(setMyEvents(evts));
+            dispatch(actions.success(evts));
             setLoading(false);
         }
         const obsError = (err: FirestoreError) => {

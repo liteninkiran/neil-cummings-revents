@@ -8,14 +8,14 @@ import EventDetailedChat from './EventDetailedChat';
 import EventDetailedSidebar from './EventDetailedSidebar';
 import { doc, DocumentSnapshot, FirestoreError, onSnapshot } from 'firebase/firestore';
 import { db } from '../../../app/config/firebase';
-import { setMyEvents } from '../eventSlice';
+import { actions } from '../eventSlice';
 import { toast } from 'react-toastify';
 import LoadingComponent from '../../../app/layouts/LoadingComponent';
 import { AppEvent } from '../../../app/types/event';
 
 export default function EventDetailedPage() {
     const { id } = useParams();
-    const event = useAppSelector(state => state.events.events.find(e => e.id === id));
+    const event = useAppSelector(state => state.events.data.find(e => e.id === id));
     const dispatch = useAppDispatch();
     const [loading, setLoading] = useState(true);
     const myEffect = () => {
@@ -25,7 +25,7 @@ export default function EventDetailedPage() {
                 ...snapshot.data() as unknown as AppEvent,
                 id: snapshot.id,
             }
-            dispatch(setMyEvents([e]));
+            dispatch(actions.success([e]));
             setLoading(false);
         }
         const error = (error: FirestoreError) => {
