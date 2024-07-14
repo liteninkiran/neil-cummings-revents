@@ -17,7 +17,7 @@ export default function EventDashboard() {
             const evts: AppEvent[] = [];
             querySnapshot.forEach(doc => {
                 const data = doc.data() as AppEvent;
-                evts.push({ id: doc.id, ...data });
+                evts.push({ ...data, id: doc.id });
             });
             dispatch(setMyEvents(evts));
             setLoading(false);

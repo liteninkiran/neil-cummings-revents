@@ -8,6 +8,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { AppEvent } from '../../../app/types/event';
 import { collection, doc, setDoc, Timestamp, updateDoc } from 'firebase/firestore';
 import { db } from '../../../app/config/firebase';
+import { toast } from 'react-toastify';
 
 export default function EventForm() {
     const formOptions: UseFormProps = {
@@ -21,7 +22,7 @@ export default function EventForm() {
         formState: {
             errors,
             isValid,
-            isSubmitting
+            isSubmitting,
         }
     } = useForm(formOptions);
     const { id } = useParams();
@@ -57,8 +58,9 @@ export default function EventForm() {
                 const ref = await createEvent(data);
                 navigate(`/events/${ref.id}`);
             }
-        } catch (error) {
-            console.log(error);
+        } catch (error: any) {
+            toast.error(error.message);
+            console.log(error.message);
         }
     }
     return (
